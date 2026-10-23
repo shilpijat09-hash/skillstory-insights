@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { GoogleButton } from "@/components/auth/google-button";
 import { PasswordInput, PasswordStrength } from "@/components/auth/password-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/auth/field";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -48,7 +48,7 @@ function SignupPage() {
     if (!loading && session) navigate({ to: "/dashboard", replace: true });
   }, [loading, session, navigate]);
 
-  const set = (k: keyof typeof values) => (e: React.ChangeEvent<HTMLInputElement>) =>
+  const set = (k: keyof typeof values) => (e: ChangeEvent<HTMLInputElement>) =>
     setValues((v) => ({ ...v, [k]: e.target.value }));
 
   const onSubmit = async (e: FormEvent) => {
@@ -130,29 +130,5 @@ function SignupPage() {
         <p className="text-center text-xs text-muted-foreground">We'll send a confirmation link to verify your email.</p>
       </form>
     </AuthShell>
-  );
-}
-
-export function Field({
-  id,
-  label,
-  error,
-  children,
-}: {
-  id: string;
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
-      {children}
-      {error && (
-        <p id={`${id}-err`} className="text-xs text-destructive">
-          {error}
-        </p>
-      )}
-    </div>
   );
 }
