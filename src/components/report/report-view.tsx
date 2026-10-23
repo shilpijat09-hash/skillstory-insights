@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ArrowRight, Check, CheckCircle2, Copy, Lightbulb, Minus, Plus, Sparkles, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +30,7 @@ const categoryLabel: Record<SkillCategory, string> = {
   soft: "Soft skills",
 };
 
-function SectionTitle({ children, hint }: { children: React.ReactNode; hint?: string }) {
+function SectionTitle({ children, hint }: { children: ReactNode; hint?: string }) {
   return (
     <div className="mb-4 flex items-baseline justify-between gap-3">
       <h2 className="text-base font-semibold">{children}</h2>
@@ -288,7 +288,8 @@ export function ReportView({ report }: { report: AnalysisReport }) {
       </Tabs>
       <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
         <Sparkles className="size-3.5" aria-hidden="true" />
-        Reviewed by: {report.meta.agents.join(" · ")}
+        {report.meta.engine === "crewai" ? "Reviewed by" : "Agent pipeline (simulated)"}:{" "}
+        {report.meta.agents.join(" · ")}
       </p>
     </div>
   );
