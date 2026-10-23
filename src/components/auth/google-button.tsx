@@ -20,17 +20,21 @@ export function GoogleButton({ label = "Continue with Google" }: { label?: strin
 
   const signIn = async () => {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/auth`,
-    });
-    if (result.error) {
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: `${window.location.origin}/auth`,
+      });
+      if (result.error) {
+        toast.error("Google sign-in failed", { description: result.error.message });
+        return;
+      }
+      if (result.redirected) return;
+      // Session is set; the auth page redirects to the dashboard once it sees it.
+    } catch (error) {
+      toast.error("Google sign-in failed", { description: error instanceof Error ? error.message : "Please try again." });
+    } finally {
       setLoading(false);
-      toast.error("Google sign-in failed", { description: result.error.message });
-      return;
     }
-    if (result.redirected) return;
-    // Session is set; the auth page redirects to the dashboard once it sees it.
-    setLoading(false);
   };
 
   return (

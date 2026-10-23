@@ -77,7 +77,7 @@ export function FileDropzone({
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium">{file.name}</p>
             <p className="text-xs text-muted-foreground">
-              {formatBytes(file.size)} · {file.name.toLowerCase().endsWith(".pdf") ? "PDF" : "DOCX"} · Ready to analyze
+              {formatBytes(file.size)} · {file.name.toLowerCase().endsWith(".pdf") ? "PDF" : "DOCX"} · Selected
             </p>
           </div>
           <Button type="button" variant="ghost" size="sm" onClick={openPicker} disabled={disabled}>

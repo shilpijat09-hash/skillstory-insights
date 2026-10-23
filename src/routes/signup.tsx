@@ -62,14 +62,22 @@ function SignupPage() {
     }
     setErrors({});
     setSubmitting(true);
-    const { data, error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/verify-email?confirmed=1`,
-        data: { full_name: parsed.data.fullName },
-      },
-    });
+    let data: Awaited<ReturnType<typeof supabase.auth.signUp>>["data"];
+    let error: Awaited<ReturnType<typeof supabase.auth.signUp>>["error"];
+    try {
+      ({ data, error } = await supabase.auth.signUp({
+        email: parsed.data.email,
+        password: parsed.data.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/verify-email?confirmed=1`,
+          data: { full_name: parsed.data.fullName },
+        },
+      }));
+    } catch (err) {
+      setSubmitting(false);
+      setErrors({ form: err instanceof Error ? err.message : "Could not create your account. Please try again." });
+      return;
+    }
     setSubmitting(false);
     if (error) {
       setErrors({ form: /already registered/i.test(error.message) ? "An account with this email already exists." : error.message });

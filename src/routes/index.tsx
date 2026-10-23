@@ -18,6 +18,7 @@ import { SiteHeader } from "@/components/marketing/site-header";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { HeroPreview } from "@/components/marketing/hero-preview";
 import { useAuth } from "@/hooks/use-auth";
+import { isMockEngine } from "@/services/analysis";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,12 +47,12 @@ const FEATURES = [
   { icon: KeyRound, title: "Missing keywords", text: "The terms the job description asks for that your resume doesn't evidence, ranked by importance." },
   { icon: ListChecks, title: "Strengths & weaknesses", text: "A candid read on what already works and what will get you filtered out." },
   { icon: Wand2, title: "Actionable rewrites", text: "Prioritised fixes with before / after examples you can copy straight into your resume." },
-  { icon: Lock, title: "Private by default", text: "Files live in private, per-user storage. Only you can read your resumes and reports." },
+  { icon: Lock, title: "User-scoped storage", text: "Resume uploads use per-user storage paths and Supabase policies when the project is configured." },
 ];
 
 const STEPS = [
   { icon: UploadCloud, title: "Upload & target", text: "Drop in a PDF or DOCX and paste the job description you're applying for." },
-  { icon: Bot, title: "Agents get to work", text: "Specialist agents parse, extract, match and score — each focused on one job." },
+  { icon: Bot, title: "Review pipeline", text: "When connected, the CrewAI backend can parse, compare and score against the target role." },
   { icon: FileSearch, title: "Get your report", text: "Review your score, gaps and rewrites, then come back to compare versions." },
 ];
 
@@ -102,7 +103,8 @@ function Landing() {
                   <Link to="/sample-report">View a sample report</Link>
                 </Button>
               </div>
-              <p className="mt-4 text-xs text-muted-foreground">PDF or DOCX · Private storage · No credit card</p>
+              <p className="mt-4 text-xs text-muted-foreground">PDF or DOCX · Supabase storage required · No credit card</p>
+              {isMockEngine && <p className="mx-auto mt-3 max-w-xl rounded-lg border border-warning/30 bg-warning-soft px-3 py-2 text-xs leading-relaxed text-warning-foreground">Prototype mode: the score preview is illustrative. The current demo report uses the job description and does not analyze your resume.</p>}
             </div>
             <div className="mt-16 animate-fade-up [animation-delay:150ms]">
               <HeroPreview />
@@ -174,10 +176,11 @@ function Landing() {
           <div className="relative mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1.2fr] lg:items-center">
             <div>
               <p className="font-mono text-xs uppercase tracking-widest text-primary-glow">The crew</p>
-              <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Specialists, not one generic prompt.</h2>
+              <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">{isMockEngine ? "Designed for a specialist agent crew." : "A connected review pipeline."}</h2>
               <p className="mt-4 leading-relaxed text-navy-muted">
-                Each agent owns one part of the review and hands its findings to the next. The result is a report that's
-                more thorough, more consistent and easier to act on.
+                {isMockEngine
+                  ? "The CrewAI backend is not connected in this demo. These are planned specialist roles; demo reports use the job description and do not run agents or read your resume."
+                  : "Reviews are sent to the configured CrewAI API. Availability and actual analysis depend on that backend."}
               </p>
               <Button variant="hero" size="lg" className="mt-8" asChild>
                 <Link to={primaryTo}>
