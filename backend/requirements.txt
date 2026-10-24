@@ -1,0 +1,9 @@
+crewai
+fastapi
+httpx
+pydantic
+pypdf
+python-docx
+python-dotenv
+supabase
+uvicorn[standard]

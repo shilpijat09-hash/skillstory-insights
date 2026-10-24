@@ -31,3 +31,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python / CrewAI backend
+backend/.venv/
+backend/.venv312/
+backend/.venv_clean/
+backend/.env
+backend/*service-account*.json
+backend/*google-credentials*.json
+__pycache__/
